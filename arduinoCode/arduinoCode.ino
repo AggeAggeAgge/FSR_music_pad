@@ -1,16 +1,17 @@
-
 #define fsrpin A0
 
-int fsrreading; //Variable to store FSR value
+int fsrreading;
+int threshold = 400;
 
 void setup() {
-  // Begin serial communication at a baud rate of 9600:
   Serial.begin(115200);
 }
 
 void loop() {
   fsrreading = analogRead(fsrpin);
 
-  Serial.println(fsrreading);
-  delay(5);
+  if (fsrreading > threshold) {
+    Serial.println("HIT");
+    delay(50);
+  }
 }

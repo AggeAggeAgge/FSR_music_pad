@@ -4,13 +4,11 @@ import serial
 import time
 import pygame
 
-# --- SERIAL SETUP ---
 arduino = serial.Serial('COM3', 115200)
-time.sleep(2)  # allow Arduino to reset
+time.sleep(2) 
 
-# --- SOUND SETUP ---
 pygame.mixer.init()
-sound = pygame.mixer.Sound("sounds/hello-there.wav")
+sound = pygame.mixer.Sound("sounds/whatsapp.mp3")
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -26,11 +24,10 @@ class MyWidget(QtWidgets.QWidget):
 
         self.button.clicked.connect(self.play_sound)
 
-        # Timer to poll Arduino
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.read_serial)
-        self.timer.start(5)  # check every 5 ms
-
+        self.timer.start(5) 
+        
     def play_sound(self):
         sound.play()
 

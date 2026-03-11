@@ -4,43 +4,52 @@ import serial
 import time
 import pygame
 
-# --- SERIAL SETUP ---
 arduino = serial.Serial('COM3', 115200)
-time.sleep(2)  # allow Arduino to reset
+time.sleep(2)
 
-# --- SOUND SETUP ---
 pygame.mixer.init()
-sound = pygame.mixer.Sound("sounds/hello-there.wav")
-
+sound = pygame.mixer.Sound("sounds/whatsapp.mp3")
 
 class MyWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.button = QtWidgets.QPushButton("Sound 1")
-        self.text = QtWidgets.QLabel("Press button or hit pad", alignment=QtCore.Qt.AlignCenter)
+        self.button = QtWidgets.QPushButton("Play Sound")
+        self.text = QtWidgets.QLabel("Hit the FSR pad", alignment=QtCore.Qt.AlignCenter)
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.text)
         layout.addWidget(self.button)
 
-        self.button.clicked.connect(self.play_sound)
+        self.button.clicked.connect(self.play_sound_manual)
 
-        # Timer to poll Arduino
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.read_serial)
-        self.timer.start(5)  # check every 5 ms
+        self.timer.start(5)
 
-    def play_sound(self):
+    def play_sound_manual(self):
+        sound.stop()
+        sound.set_volume(1.0)
         sound.play()
 
     def read_serial(self):
         if arduino.in_waiting:
-            data = arduino.readline().decode(errors="ignore").strip()
+            try:
+                data = arduino.readline().decode().strip()
+                value = int(data)
 
-            if data.startswith("HIT"):
-                print(data)
+                print("FSR:", value)
+
+                volume = min(value / 1023, 1.0)
+
+                sound.stop()
+
+                sound.set_volume(volume)
+
                 sound.play()
+
+            except:
+                pass
 
 
 if __name__ == "__main__":
