@@ -10,6 +10,7 @@ time.sleep(2)
 
 pygame.mixer.init()
 sound = pygame.mixer.Sound("sounds/808-boom.mp3")
+sound2 = pygame.mixer.Sound("sounds/cowbell-808.wav")
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -36,11 +37,13 @@ class MyWidget(QtWidgets.QWidget):
         if arduino.in_waiting:
             data = arduino.readline().decode(errors="ignore").strip()
 
-            if data.startswith("HIT"):
-                keyboard.press_and_release('space')
+            if data.startswith("1"):
                 print(data)
                 sound.play()
 
+            if data.startswith("2"):
+                print(data)
+                sound2.play()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
