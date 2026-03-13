@@ -12,6 +12,6 @@ void loop() {
 
   if (fsrreading > threshold) {
     Serial.println("HIT");
-    delay(50);
+    delay(100);
   }
 }

@@ -3,12 +3,13 @@ from PySide6 import QtCore, QtWidgets
 import serial
 import time
 import pygame
+import keyboard
 
 arduino = serial.Serial('COM3', 115200)
 time.sleep(2) 
 
 pygame.mixer.init()
-sound = pygame.mixer.Sound("sounds/whatsapp.mp3")
+sound = pygame.mixer.Sound("sounds/808-boom.mp3")
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -36,6 +37,7 @@ class MyWidget(QtWidgets.QWidget):
             data = arduino.readline().decode(errors="ignore").strip()
 
             if data.startswith("HIT"):
+                keyboard.press_and_release('space')
                 print(data)
                 sound.play()
 
